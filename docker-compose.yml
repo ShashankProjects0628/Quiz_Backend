@@ -1,0 +1,23 @@
+version: '3.9'
+services:
+  server:
+    build:
+      context: .
+    container_name: quiz-backend
+    ports:
+      - '3000:3000'
+    env_file:
+      - .env
+    depends_on:
+      - mongodb
+      - redis
+  mongodb:
+    image: mongo:latest
+    container_name: quiz-mongodb
+    ports:
+      - '27017:27017'
+  redis:
+    image: redis:latest
+    container_name: quiz-redis
+    ports:
+      - '6379:6379'
