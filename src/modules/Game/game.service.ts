@@ -112,9 +112,10 @@ export class GameService {
       });
 
       // Notify participants of game start
-      const firstQuestion = await this.questionRepository.findById(
-        quizSession.questions[0],
-      );
+      const firstQuestion =
+        await this.questionRepository.findQuestionWithoutCorrectAnswer(
+          quizSession.questions[0],
+        );
 
       this.socketService.emitEvent(
         SOCKET_EVENTS.GAME_INIT,
@@ -130,11 +131,11 @@ export class GameService {
         quizSession = await this.quizSessionRepository.findById(
           quizSession._id.toString(),
         );
-        const question = await this.questionRepository.findById(
-          quizSession.questions[i],
-        );
+        const question =
+          await this.questionRepository.findQuestionWithoutCorrectAnswer(
+            quizSession.questions[i],
+          );
 
-        delete question.correctAnswer;
         this.socketService.emitEvent(
           SOCKET_EVENTS.QUESTION_SEND,
           {
@@ -187,19 +188,34 @@ export class GameService {
       await this.quizSessionRepository.findById(quizSessionId);
     const question = await this.questionRepository.findById(questionId);
 
+    if (!quizSession || !question) return null;
+    // Check if the selected answer is correct
     if (question.correctAnswer.toString() === selectedOption) {
+      // Find the participant in the scores array
       const participant = quizSession.scores.find(
-        (s) => s.userId.toString() === userId,
+        (score) => score.userId.toString() === userId,
       );
 
-      participant.score++;
+      if (participant) {
+        // Increment the participant's score
+        participant.score += 1;
+
+        // Mark the scores array as modified
+        quizSession.markModified('scores');
+
+        // Save the updated quiz session
+        const response = await quizSession.save();
+
+        return response;
+      } else {
+        this.logger.error(`Participant with userId: ${userId} not found`);
+        throw new Error(`Participant not found in quiz session`);
+      }
     }
 
-    const response = await this.quizSessionRepository.update(quizSessionId, {
-      scores: quizSession.scores,
-    });
-
-    return response;
+    // If the answer is incorrect, return the quiz session without changes
+    this.logger.log('Answer was incorrect, no updates made.');
+    return quizSession;
   }
 
   //  Calculate the winner based on scores

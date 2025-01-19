@@ -49,4 +49,10 @@ export class QuestionRepository {
       ])
       .exec();
   }
+
+  async findQuestionWithoutCorrectAnswer(
+    id: Types.ObjectId,
+  ): Promise<Question | null> {
+    return this.questionModel.findById(id).select('-correctAnswer');
+  }
 }
