@@ -19,12 +19,9 @@ const sampleInterests = [
 ];
 
 async function seedInterests() {
-  console.log('Starting interests seeder...');
-
   try {
     // Connect to MongoDB
     await mongoose.connect(mongoUri);
-    console.log('Connected to MongoDB.');
 
     // Initialize the Interest Model
     const Interest = mongoose.model('Interest', InterestSchema);
@@ -32,7 +29,6 @@ async function seedInterests() {
     // Check if the collection already has data
     const existingInterests = await Interest.find().exec();
     if (existingInterests.length > 0) {
-      console.log('Interests data already exists. Skipping seeding.');
       return;
     }
 

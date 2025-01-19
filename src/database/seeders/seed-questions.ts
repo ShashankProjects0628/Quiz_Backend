@@ -158,12 +158,9 @@ const generateSampleQuestions = (
 };
 
 async function seedQuestions() {
-  console.log('Starting interests seeder...');
-
   try {
     // Connect to MongoDB
     await mongoose.connect(mongoUri);
-    console.log('Connected to MongoDB.');
 
     // Initialize the Interest Model
     const Question = mongoose.model('Question', QuestionSchema);
@@ -171,7 +168,6 @@ async function seedQuestions() {
     // Check if the collection already has data
     const existingQuestions = await Question.find().exec();
     if (existingQuestions.length > 0) {
-      console.log('Questions data already exists. Skipping seeding.');
       return;
     }
 
@@ -186,7 +182,6 @@ async function seedQuestions() {
   } finally {
     // Close the MongoDB connection
     await mongoose.connection.close();
-    console.log('MongoDB connection closed.');
   }
 }
 
