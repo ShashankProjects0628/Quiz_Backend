@@ -7,7 +7,7 @@ async function bootstrap() {
 
   // Set up CORS
   app.enableCors({
-    origin: '*', // Replace with allowed origins in production
+    origin: '*', // TODO: Will be replaced with frontend URL
   });
 
   // Start the HTTP server
@@ -17,6 +17,6 @@ async function bootstrap() {
   const socketService = app.get(SocketService);
   socketService.initialize(server);
 
-  console.log(`Application is running on: http://localhost:3001`);
+  console.log(`Application is running`);
 }
 bootstrap();
