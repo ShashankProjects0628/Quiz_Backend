@@ -8,13 +8,17 @@ This project is a real-time quiz application that leverages MongoDB, Redis, and 
 
 Run the following command to install the required dependencies:
 
+```bash
 npm i
+```
 
 . Instantiate and Execute Docker Containers
 
 Run the following command to start the MongoDB and Redis containers:
 
+```bash
 docker-compose up
+```
 
 Seeding Master Data
 
@@ -24,27 +28,35 @@ Seed the master data for interests and questions into the MongoDB database.
 
 Run the following command to seed the master data for interests:
 
+```bash
 npm run seed:interests
+```
 
 . Seed Questions
 
 Run the following command to seed the master data for questions:
 
+```bash
 npm run seed:questions
+```
 
 . Configure Environment Variables
 
 Create a .env file in the root directory with the following contents:
 
+```bash
 MONGO_URI=mongodb://localhost:27017/quiz-app
 REDIS_URL=redis://localhost:6379
 JWT_SECRET=securesecretexample
+```
 
 . Start the Application
 
 Run the following command to start the application:
 
+```bash
 npm start
+```
 
 Workflow
 
@@ -69,6 +81,7 @@ Steps:
 a. Open Postman: cmd/ctrl + n -> Select "Socket.IO" template.
 b. Configure the connection:
 
+```bash
 Endpoint: <http://localhost:3001>
 
 Headers:
@@ -94,6 +107,7 @@ question:send
 answer:submit
 
 game:end
+```
 
 Starting a Quiz Session
 
@@ -101,6 +115,7 @@ Starting a Quiz Session
 
 Use the /game/start endpoint in the Postman collection to start a quiz session. Pass the access token in the authorization header.
 
+```bash
 Endpoint:
 
 POST <http://localhost:3001/game/start>
@@ -130,11 +145,13 @@ Emit the answer:submit event with the following JSON payload:
 "questionId": "[Question ID from question:send]",
 "answer": "[ID of the selected option]"
 }
+```
 
 . Quiz Completion
 
 After all questions are answered, the game:end event will be emitted to participants, containing the final scores. The winner will be updated in the quiz record stored in the database.
 
+```bash
 Documentation
 
 Socket.IO Connection Details
@@ -160,5 +177,6 @@ Headers:
 Content-Type: application/json
 
 Authorization: Bearer [accessToken]
+```
 
 Enjoy building and exploring the real-time quiz application!
