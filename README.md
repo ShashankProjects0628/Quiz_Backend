@@ -179,4 +179,31 @@ Content-Type: application/json
 Authorization: Bearer [accessToken]
 ```
 
+## Kubernetes: Explanation of the Components
+
+## Deployments
+
+Each deployment (quiz-backend, quiz-mongodb, quiz-redis) is defined with:
+A single replica for simplicity.
+Containers pointing to the required images.
+
+## Services
+
+NodePort service for quiz-backend to expose it externally on port 30001.
+ClusterIP services for quiz-mongodb and quiz-redis for internal communication within the Kubernetes cluster.
+
+## ConfigMap
+
+Stores the environment variables like MONGO_URI and REDIS_URL.
+Secret:
+
+Stores sensitive data like JWT_SECRET, encoded in base64 for security.
+
+## Steps to Deploy on Kubernetes (Docker Desktop or Minikube)
+
+```bash
+docker build -t quiz-backend:latest .
+kubectl apply -f kube.yaml
+```
+
 Enjoy building and exploring the real-time quiz application!
